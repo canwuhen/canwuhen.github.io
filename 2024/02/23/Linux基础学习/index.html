@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+  <head>
+     
+    <meta charset="UTF-8">
+    <title>Linux基础学习 - 残无痕</title>
+    <link rel="shortcut icon" href="/static/img/icon.png">
+    <link rel="icon" href="/static/img/icon.png" sizes="192x192"/>
+    
+<link rel="stylesheet" href="/static/kico.css">
+<link rel="stylesheet" href="/static/hingle.css">
+
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1"/>
+    <meta property="og:site_name" content="残无痕">
+    <meta property="og:title" content="Linux基础学习"/>
+    
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+  <body>
+    <header>
+    <div class="head-title">
+        <h4>残无痕</h4>
+    </div>
+    <div class="head-action">
+        <div class="toggle-btn"></div>
+        <div class="light-btn"></div>
+        <div class="search-btn"></div>
+    </div>
+    <form class="head-search" method="post">
+        <input type="text" name="s" placeholder="搜索什么？">
+    </form>
+    <nav class="head-menu">
+        <a href="/">首页</a>
+        <div class="has-child">
+            <a>分类</a>
+            <div class="sub-menu">
+                
+            </div>
+        </div>
+        
+            <a href="/about">关于我</a>
+        
+            <a href="/friends">朋友们</a>
+        
+    </nav>
+</header>
+
+    <main>
+    <div class="wrap min">
+        <section class="post-title">
+            <h2>Linux基础学习</h2>
+            <div class="post-meta">
+                <time class="date">2024.02.23</time>
+            
+            </div>
+        </section>
+        <article class="post-content">
+        
+            <h1 id="Linux-版本选型"><a href="#Linux-版本选型" class="headerlink" title="Linux 版本选型"></a>Linux 版本选型</h1><table>
+<thead>
+<tr>
+<th>系统版本</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CentOS</td>
+<td>没有LTS 选择较新的版本，CentOS7.x 7.9</td>
+</tr>
+<tr>
+<td>Ubuntu</td>
+<td>LTS （长期稳定版）18.04 、20.04</td>
+</tr>
+<tr>
+<td>麒麟</td>
+<td>Kylin v10（CentOS7 更新了内核）</td>
+</tr>
+</tbody></table>
+<h1 id="工作学习环境部署"><a href="#工作学习环境部署" class="headerlink" title="工作学习环境部署"></a>工作学习环境部署</h1><h2 id="1-设置ROOT-密码"><a href="#1-设置ROOT-密码" class="headerlink" title="1.设置ROOT 密码"></a>1.设置ROOT 密码</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo  passwd</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-网卡配置"><a href="#2-网卡配置" class="headerlink" title="2.网卡配置"></a>2.网卡配置</h2><p>设置静态IP</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ifconfig</span><br><span class="line"></span><br><span class="line">vim /etc/sysconfig/network-scripts/ifcfg-ens33 </span><br><span class="line"></span><br><span class="line">BOOTPROTO=static</span><br><span class="line">ONBOOT=yes</span><br><span class="line">IPADDR=你的静态IP地址</span><br><span class="line">NETMASK=你的子网掩码</span><br><span class="line">GATEWAY=你的默认网关</span><br><span class="line">DNS1=首选DNS服务器</span><br><span class="line">DNS2=备用DNS服务器</span><br><span class="line"></span><br><span class="line">systemctl stop firewalld.service 关闭防火墙</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>重启网卡：</p>
+<p>查看防火墙状态：</p>
+<p>关闭防火墙：</p>
+<p>禁用防火墙：</p>
+<h2 id="3-更改yum源"><a href="#3-更改yum源" class="headerlink" title="3.更改yum源"></a>3.更改yum源</h2><ol>
+<li><p>备份原yum源</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>下载最新的centos yum源（centos7版本 ）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget -O /etc/yum.repos.d/CentOS-Base.repo </span><br><span class="line">https://mirrors.aliyun.com/repo/Centos-7.repo #阿里云</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">或者</span></span><br><span class="line">curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>运行 yum makecache 生成缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum makecache</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>清空原yum数据 查看是否生效</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum repolist</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Linux核心目录结构"><a href="#Linux核心目录结构" class="headerlink" title="Linux核心目录结构"></a>Linux核心目录结构</h2><table>
+<thead>
+<tr>
+<th>目录名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&#x2F;</td>
+<td>根目录</td>
+</tr>
+<tr>
+<td>&#x2F;home</td>
+<td>普通用户的家目录</td>
+</tr>
+<tr>
+<td>&#x2F;root</td>
+<td>Root 用户的家目录</td>
+</tr>
+<tr>
+<td>&#x2F;etc</td>
+<td>系统，服务配置文件的目录</td>
+</tr>
+<tr>
+<td>&#x2F;tmp</td>
+<td>临时目录</td>
+</tr>
+<tr>
+<td>&#x2F;ptoc</td>
+<td>系统服务，进程信息，类似于汽车的仪表盘</td>
+</tr>
+<tr>
+<td>&#x2F;dev</td>
+<td>Device，设备文件目录，硬盘、光盘…</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><a href="">《鸟叔的Linux私房菜》 P165</a></p>
+</blockquote>
+<h1 id="Liunx核心命令"><a href="#Liunx核心命令" class="headerlink" title="Liunx核心命令"></a>Liunx核心命令</h1><ul>
+<li><p>进入某个目录：**<code>cd</code>**</p>
+</li>
+<li><p>列表显示目录内容：**<code>ls</code>**</p>
+<ul>
+<li>-l 	long以长格式显示（显示详情信息），简写成ll</li>
+<li>-t        time 按照修改时间顺序</li>
+<li>-r        逆序排序，一般-rt一起使用</li>
+<li>-h       以人类可读形式显示大小</li>
+</ul>
+</li>
+<li><p>限时自己所在目录：**<code>pwd</code>**</p>
+</li>
+<li><p>创建目录：**<code>mkdir</code>**</p>
+<ul>
+<li><strong>-p</strong>	创建多层目录</li>
+</ul>
+</li>
+<li><p>创建文件：**<code>touch</code>**</p>
+</li>
+<li><p>移动\改名：**<code>mv</code>**</p>
+</li>
+<li><p>复制，拷贝：**<code>cp</code>**</p>
+<ul>
+<li>-a 	all简单理解为复制全部</li>
+<li>-r          递归复制，复制目录</li>
+<li>-p        复制时保持属性不变</li>
+<li>-d        可以复制软连接</li>
+</ul>
+</li>
+<li><p>输出信息到屏幕：**<code>echo</code>**</p>
+</li>
+<li><p>编辑文件与修改文件：**<code>vi/vim</code>**</p>
+</li>
+<li><p>删除：**<code>rf</code>**</p>
+</li>
+</ul>
+
+        </article>
+        <section class="post-near">
+            <ul>
+                
+                    <li>上一篇: 看完啦 (つд⊂)</li>
+                
+                
+                    <li>下一篇: <a href="/2024/02/22/hello-world/">Hello World</a></li>
+                
+            </ul>
+        </section>
+        
+    
+        <section class="post-author">
+        
+            <figure class="author-avatar">
+                <img src="https://sdn.geekzu.org/avatar/d22eb460ecab37fcd7205e6a3c55c228?s=200&r=X&d=" alt="Hingle" />
+            </figure>
+        
+            <div class="author-info">
+                <h4>Hingle</h4>
+                <p>请在这里设置你的作者信息</p>
+            </div>
+        </section>
+    
+    </div>
+</main>
+
+    <footer>
+    <div class="buttons">
+        <a class="to-top" href="#"></a>
+    </div>
+    <div class="wrap min">
+        <section class="widget">
+            <div class="row">
+                <div class="col-m-4">
+                    <h3 class="title-recent">最新文章：</h3>
+                    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2024/02/23/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">Linux基础学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2024/02/22/hello-world/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/2022/07/11/JQuery%E7%AC%94%E8%AE%B0/">JQuery笔记</a></li></ul>
+                </div>
+                <div class="col-m-4">
+                    <h3 class="title-date">时光机：</h3>
+                    <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/02/">February 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">July 2022</a></li></ul>
+                </div>
+                <div class="col-m-4">
+                    <h3 class="title-tags">标签云：</h3>
+                    <a href="/tags/js/" style="font-size: 10px;">js</a>
+                </div>
+            </div>
+        </section>
+        <section class="sub-footer">
+            <p>© 2024 <a href="/">残无痕</a>. All Rights Reserved. Theme By <a href="https://github.com/Dreamer-Paul/Hingle" target="_blank" rel="nofollow">Hingle</a>.</p>
+        </section>
+    </div>
+</footer>
+
+
+<script src="/static/kico.js"></script>
+<script src="/static/hingle.js"></script>
+
+
+<script>var hingle = new Paul_Hingle({"copyright":true,"night":true});</script>
+
+  </body>
+</html>
