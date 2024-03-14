@@ -3,7 +3,7 @@
   
     
     <entry>
-      <title><![CDATA[集群架构学习.md]]></title>
+      <title><![CDATA[集群架构学习]]></title>
       <url>/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/</url>
       <content type="html"><![CDATA[<p>综合架构项目，包括各种服务以及集群搭建</p>
 <span id="more"></span>
@@ -1565,9 +1565,13 @@ localhost.localdomain
     <entry>
       <title><![CDATA[JQuery笔记]]></title>
       <url>/2022/07/11/JQuery%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<h1 id="jQuery概述"><a href="#jQuery概述" class="headerlink" title="jQuery概述"></a>jQuery概述</h1><p>jQuery时一个快速简洁的JavaScript库，其设置宗旨是“write Less，Do More”，即提倡写更少的代码。j就是Javascript；Query 查询；意思是查询js，把js中的DOM操作做了封装，我们可以快速查询使用里面的功能。</p>
+      <content type="html"><![CDATA[<p>jQuery时一个快速简洁的JavaScript库，其设置宗旨是“write Less，Do More”，即提倡写更少的代码。j就是Javascript；Query 查询；意思是查询js，把js中的DOM操作做了封装，我们可以快速查询使用里面的功能。</p>
 <p>jQuery封装了JAvaScript常用的功能代码，优化了Dom操作、处理事件、动画设计和Ajax交互</p>
 <span id="more"></span>
+
+<h1 id="jQuery概述"><a href="#jQuery概述" class="headerlink" title="jQuery概述"></a>jQuery概述</h1><p>jQuery时一个快速简洁的JavaScript库，其设置宗旨是“write Less，Do More”，即提倡写更少的代码。j就是Javascript；Query 查询；意思是查询js，把js中的DOM操作做了封装，我们可以快速查询使用里面的功能。</p>
+<p>jQuery封装了JAvaScript常用的功能代码，优化了Dom操作、处理事件、动画设计和Ajax交互</p>
+<!-- more -->
 
 <p><strong>常见的JavaScript库</strong></p>
 <ul>
