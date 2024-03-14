@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="host 解析 123456789101112cat &gt;&gt;&#x2F;etc&#x2F;hosts &lt;&lt;EOF172.16.1.5 lb01172.16.1.6 lb01172.16.1.7 web01172.16.1.8 web02172.16.1.9 web03172.16.1.10 web04172.16.1.31 nfs01172.16.1.41 backup172.16.1.51 d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="集群架构学习.md">
+<meta property="og:url" content="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/index.html">
+<meta property="og:site_name" content="残无痕">
+<meta property="og:description" content="host 解析 123456789101112cat &gt;&gt;&#x2F;etc&#x2F;hosts &lt;&lt;EOF172.16.1.5 lb01172.16.1.6 lb01172.16.1.7 web01172.16.1.8 web02172.16.1.9 web03172.16.1.10 web04172.16.1.31 nfs01172.16.1.41 backup172.16.1.51 d">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-27T14:36:03.000Z">
+<meta property="article:modified_time" content="2024-03-13T04:36:03.000Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>集群架构学习.md | 残无痕</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">残无痕</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="残无痕">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          集群架构学习.md
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-02-27 22:36:03" itemprop="dateCreated datePublished" datetime="2024-02-27T22:36:03+08:00">2024-02-27</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-03-13 12:36:03" itemprop="dateModified" datetime="2024-03-13T12:36:03+08:00">2024-03-13</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>host 解析</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt;/etc/hosts &lt;&lt;EOF</span><br><span class="line">172.16.1.5 lb01</span><br><span class="line">172.16.1.6 lb01</span><br><span class="line">172.16.1.7 web01</span><br><span class="line">172.16.1.8 web02</span><br><span class="line">172.16.1.9 web03</span><br><span class="line">172.16.1.10 web04</span><br><span class="line">172.16.1.31 nfs01</span><br><span class="line">172.16.1.41 backup</span><br><span class="line">172.16.1.51 db01</span><br><span class="line">172.16.1.61 m01</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="综合架构"><a href="#综合架构" class="headerlink" title="综合架构"></a>综合架构</h2><p>什么是综合架构</p>
+<p>要求</p>
+<p>综合架构集群架构</p>
+<p>综合架构技术栈</p>
+<h2 id="什么是综合架构"><a href="#什么是综合架构" class="headerlink" title="什么是综合架构"></a>什么是综合架构</h2><ul>
+<li>一般架构通用的结构，这就是综合架构</li>
+<li>综合架构也是一个参考，每个公司都有自己的特别的架构或需求</li>
+</ul>
+<h2 id="新的要求"><a href="#新的要求" class="headerlink" title="新的要求"></a>新的要求</h2><ul>
+<li>第一阶段-运维基操，故障及故障提示，知识点 <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/99ec5bb4183f">简书-[故障集合]Linux必备故障及原因50个</a></li>
+<li>第二阶段-网站集群架构，遇到故障提示尝试解决</li>
+</ul>
+<h2 id="综合架构详解"><a href="#综合架构详解" class="headerlink" title="综合架构详解"></a>综合架构详解</h2><ul>
+<li>分别通过开发，用户，运维角度分析网站架构</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>角度</th>
+<th>说明</th>
+<th>相关操作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发角度</td>
+<td>主要关注书写代码，这些代码需要服务器服务运行</td>
+<td>存放代码，开发如何提交运维，运维如何部署，如何测试代码</td>
+</tr>
+<tr>
+<td>用户角度</td>
+<td>app 或浏览器访问网站，整个访问流程中涉及的服务功能</td>
+<td>整个网站架构的核心</td>
+</tr>
+<tr>
+<td>运维角度</td>
+<td>如何快速部署，自动化部署，自动话监控</td>
+<td>如何自动化维护，监控，故障修复</td>
+</tr>
+</tbody></table>
+<p>开发角度架构</p>
+<p>dev-&gt; 代码存放(git\github\gitee\gitlab)-&gt;测试环境（Jenkins&#x2F;Sonarqube）-&gt;发布网站</p>
+<p>用户角度架构</p>
+<p>user-&gt;DNS-&gt;互联网-&gt;CDN-&gt;防火墙(80\443)-&gt;网</p>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><table>
+<thead>
+<tr>
+<th>角度</th>
+<th>功能</th>
+<th>服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发角度</td>
+<td>存放代码</td>
+<td>Gitlab，Gogs，Github，Gitee</td>
+</tr>
+<tr>
+<td></td>
+<td>集成，发布</td>
+<td>Jenkins</td>
+</tr>
+<tr>
+<td></td>
+<td>代码检查</td>
+<td>Sonarqube</td>
+</tr>
+<tr>
+<td></td>
+<td>私服，软件包仓库（JAVA）</td>
+<td>Nexus</td>
+</tr>
+<tr>
+<td>用户角度</td>
+<td>DNS解析</td>
+<td>DNS云解析（阿里），Bind9，DNSmasq，CoreDNs</td>
+</tr>
+<tr>
+<td></td>
+<td>CDN缓存</td>
+<td>各种厂商CDN服务阿里，蓝汛，七牛</td>
+</tr>
+<tr>
+<td></td>
+<td>防火墙</td>
+<td>硬件防火墙：深信服，华为，奇安信 <br />软件防火墙：firewalld，iptables<br />公有云：安全组，态势感知，云安全中心</td>
+</tr>
+<tr>
+<td></td>
+<td>负载均衡</td>
+<td>硬件：F5，<br />软件：nginx（tengine，openResty），haproxy，lvs<br />公有云：</td>
+</tr>
+<tr>
+<td></td>
+<td>web网站服务器</td>
+<td>基本：nginx，tengine，openResty<br />架构：<br />LNMP（PHP）：Linux，Nginx，MySQL，PHP<br />LNMT（JAVA）：Linux，Nginx，MySQL，Tomcat<br />LNMP（Python）：Linux，Nginx，MySQL，Python<br />LNMG（Go）：Linux，Nginx，MySQL，Go</td>
+</tr>
+<tr>
+<td></td>
+<td>缓存服务器</td>
+<td>Redis，Kafka，xxxMQ</td>
+</tr>
+<tr>
+<td></td>
+<td>数据库服务器</td>
+<td>MySQL，Oracle<br />国产：TiDB，openGauess,OceanBase</td>
+</tr>
+<tr>
+<td></td>
+<td>存储</td>
+<td>硬件存储<br />软件存储：&#x3D;&#x3D; <strong>NFS</strong> &#x3D;&#x3D;，分布式存储<br />对象存储：阿里OSS，七牛云对象存储，腾讯OSS</td>
+</tr>
+<tr>
+<td>运维角度</td>
+<td>VPN</td>
+<td>硬件：开源OpenVPN</td>
+</tr>
+<tr>
+<td></td>
+<td>堡垒机</td>
+<td>开源：Teleport，Jumpserver<br />商业：硬件，软件</td>
+</tr>
+<tr>
+<td></td>
+<td>批量管理</td>
+<td>Ansible</td>
+</tr>
+<tr>
+<td></td>
+<td>监控</td>
+<td>Zabbix，Grafana，Prometheus</td>
+</tr>
+<tr>
+<td></td>
+<td>日志收集</td>
+<td>Elastic Stack（ELK，EFK，EBLK,ElasticSearch,Filebeat,Logstash,Kibana)</td>
+</tr>
+<tr>
+<td></td>
+<td>审计</td>
+<td>SQL审计，Yearning，Archery</td>
+</tr>
+<tr>
+<td></td>
+<td>安全</td>
+<td>商业：AppScan，Nessus，<br />开源：ClamAV</td>
+</tr>
+</tbody></table>
+<h2 id="1-备份服务"><a href="#1-备份服务" class="headerlink" title="1.备份服务"></a>1.备份服务</h2><ul>
+<li>备份服务：需要使用脚本，打包备份，定时任务</li>
+<li>rsyncd服务，不同主机之间传输</li>
+<li>特点：<ul>
+<li>rsync是一个服务也是命令</li>
+<li>使用方便，有多种模式</li>
+<li>增量传输</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">将backup的 /etc目录传输到 nfs的tmp下</span></span><br><span class="line"></span><br><span class="line"> scp -r /etc/sysconfig/ root@10.0.0.31:/tmp/</span><br><span class="line"><span class="meta prompt_"> #</span><span class="language-bash">-r 传输文件夹</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="reync参数选项"><a href="#reync参数选项" class="headerlink" title="reync参数选项"></a>reync参数选项</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-a</td>
+<td>-r递归复制<br/>-L复制软连接<br/>-p保持权限不变<br/>-m保持修改时间不变<br/>-o所有者不变<br/>-g用户组不变<br/>-D –devices –sp<br/></td>
+</tr>
+<tr>
+<td>-v</td>
+<td>显示过程</td>
+</tr>
+<tr>
+<td>-z</td>
+<td>传输数据的时候进行压缩</td>
+</tr>
+<tr>
+<td>-P</td>
+<td>显示每个文件传输过程（进度条)断点续传–partial –progress</td>
+</tr>
+<tr>
+<td>–bwlimit</td>
+<td>限速 注意不要与-z一起使用</td>
+</tr>
+<tr>
+<td>–exclude<br />–excludefrom</td>
+<td>排除</td>
+</tr>
+<tr>
+<td>–delete</td>
+<td>目标目录与原目录保持一致的传输（高度保持2遍一致，实时同步）</td>
+</tr>
+<tr>
+<td>–password</td>
+<td></td>
+</tr>
+</tbody></table>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">限速并传输</span></span><br><span class="line">rsync -aP --bwlimit=500kb</span><br><span class="line">/tmp/1g10.0.0.31:/mnt/</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="rsync企业应用"><a href="#rsync企业应用" class="headerlink" title="rsync企业应用"></a>rsync企业应用</h3><table>
+<thead>
+<tr>
+<th>应用场景</th>
+<th>应用建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rsync作为命令使用</td>
+<td>临时拉取，推送数据，未来这个需求可以使用scp命令实现</td>
+</tr>
+<tr>
+<td>rsync服务+定时任务</td>
+<td>定时备份，定期备份案例（定时任务进行备份+通过rsync传输备份）</td>
+</tr>
+<tr>
+<td>rsync服务+serync&#x2F;lsyncd实现实时同步</td>
+<td>解决存储服务单点问题</td>
+</tr>
+</tbody></table>
+<h3 id="rsunc不同模式"><a href="#rsunc不同模式" class="headerlink" title="rsunc不同模式"></a>rsunc不同模式</h3><ul>
+<li>本地模式</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rsync -a /etc/ /tmp/</span><br><span class="line">rsync -a /etc /opt/</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>:warning:在rsync中对于 <strong>&#x2F;etc</strong>&#x2F;和 <strong>&#x2F;etc</strong> 是有区别的</p>
+<p>&#x2F;etc 	&#x2F;etc目录 +目录的内容</p>
+<p>&#x2F;etc&#x2F;          &#x2F;etc&#x2F;目录下面的内容	</p>
+</blockquote>
+<ul>
+<li>远程模式</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -av /etc root@10.0.0.31</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>守护进程模式</p>
+<p>修改配置文件&#x2F;etc&#x2F;rsyncd.conf</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">fake super =yes  #如果不开启测C7传输报错（伪装成root）</span><br><span class="line">uid = rsync</span><br><span class="line">gid = rsync</span><br><span class="line">use chroot = no</span><br><span class="line">max connections = 2000 #最大连接数</span><br><span class="line">timeout = 600          #超时链接时间</span><br><span class="line">pid file = /var/run/rsyncd.pid  #存放服务的pid</span><br><span class="line">lock file = /var/run/rsync.lock #进程锁文件 防止重复运行</span><br><span class="line">log file = /var/log/rsyncd.log  #服务端日志</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">#ignore errors  #忽略错误</span></span></span><br><span class="line">read only = false  #可以读写</span><br><span class="line">list = false   #关闭rsrnc服务端列表</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">hosts allow  = 10.0.0.0/24</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">hosts deny = 0.0.0.0/32</span></span><br><span class="line">auth users = rsync_backup</span><br><span class="line">secrets file = /etc/rsync.password</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment">##########################</span></span></span><br><span class="line">[data]</span><br><span class="line">path =/data           </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>后续配置（准备用户，目录以及密码文件）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">添加虚拟用户</span></span><br><span class="line">useradd -s /sbin/nologin -M rsync</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">创建密码文件</span></span><br><span class="line">echo &#x27;rsync_backup:123 &#x27;&gt;/etc/rsync.password</span><br><span class="line">chmod 600 /etc/rsync.password</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">共享目录与权限</span></span><br><span class="line">mkdir /data/</span><br><span class="line">chown -R rsync.rsync /data/</span><br></pre></td></tr></table></figure>
+
+<p>启动服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">systemctl start rsyncd  #开启服务</span><br><span class="line">systemctl enable rsyncd #设置运行</span><br><span class="line">systemctl status rsyncd #查看状态</span><br></pre></td></tr></table></figure>
+
+<p>传输测试</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rsync -av /etc/hostname rsync_backup@backup::data</span><br></pre></td></tr></table></figure>
+
+<p>设置免密登录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;123&#x27; &gt;&gt; /etc/rsync.client</span><br><span class="line">chmod 600 /etc/rsync.client </span><br></pre></td></tr></table></figure>
+
+<p>访问控制-安全措施</p>
+<ul>
+<li>hosts allow 只准指定的ip或网段访问</li>
+<li>hosts deny 拒绝</li>
+</ul>
+<h3 id="项目：全网备份项目"><a href="#项目：全网备份项目" class="headerlink" title="项目：全网备份项目"></a>项目：全网备份项目</h3><ul>
+<li><h4 id="1）环境准备"><a href="#1）环境准备" class="headerlink" title="1）环境准备"></a>1）环境准备</h4></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>角色</th>
+<th>主机</th>
+<th>运行服务</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存放备份</td>
+<td>backup</td>
+<td>rsync 服务端</td>
+</tr>
+<tr>
+<td>生成备份</td>
+<td>nfs01</td>
+<td>rsync 客户端</td>
+</tr>
+<tr>
+<td>生成备份</td>
+<td>web01</td>
+<td>rsync 客户端</td>
+</tr>
+</tbody></table>
+<ul>
+<li><h4 id="2）项目步骤"><a href="#2）项目步骤" class="headerlink" title="2）项目步骤"></a>2）项目步骤</h4></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>步骤说明</th>
+<th>详细内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>:one:rsync服务端并调试</td>
+<td>服务端配置 &#x2F;backup目录</td>
+</tr>
+<tr>
+<td>rsync客户端节点配置配置脚本</td>
+<td>备份<br />推送<br />清理</td>
+</tr>
+<tr>
+<td>其他节点匹配值定时任务</td>
+<td>定时运行脚本</td>
+</tr>
+<tr>
+<td>在备份服务器上检查并发送结果邮件</td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><h4 id="3）rsync服务端调试"><a href="#3）rsync服务端调试" class="headerlink" title="3）rsync服务端调试"></a>3）rsync服务端调试</h4></li>
+<li><h4 id="4）客户端备份脚本"><a href="#4）客户端备份脚本" class="headerlink" title="4）客户端备份脚本"></a>4）客户端备份脚本</h4><p>bak_conf.sh</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">#desc:备份服务器的配置文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#1.变量</span></span><br><span class="line">ip=$(hostname -I | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line">backup_dir=/backup/<span class="variable">$&#123;ip&#125;</span></span><br><span class="line">time=`<span class="built_in">date</span> +%F_%w`</span><br><span class="line">backup_file=conf-<span class="variable">$&#123;time&#125;</span>.tar.gz</span><br><span class="line">backup_server_ip=172.16.1.41</span><br><span class="line">mode_name=backup</span><br><span class="line">user_name=rsync_backup</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.备份命令</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="variable">$&#123;backup_dir&#125;</span></span><br><span class="line">tar zcf <span class="variable">$&#123;backup_dir&#125;</span>/<span class="variable">$&#123;backup_file&#125;</span> /etc/ /var/spool/cron</span><br><span class="line"></span><br><span class="line"><span class="comment">#md5</span></span><br><span class="line"><span class="built_in">md5sum</span> <span class="variable">$&#123;backup_dir&#125;</span>/<span class="variable">$&#123;backup_file&#125;</span> &gt;<span class="variable">$&#123;backup_dir&#125;</span>/fingerprint.md5</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.推送命令</span></span><br><span class="line">rsync -av <span class="variable">$&#123;backup_dir&#125;</span> <span class="variable">$&#123;user_name&#125;</span>@<span class="variable">$&#123;backup_server_ip&#125;</span>::<span class="variable">$&#123;mode_name&#125;</span> --password-file=/etc/rsync.client</span><br><span class="line"></span><br><span class="line"><span class="comment">#4.删除旧备份</span></span><br><span class="line">find <span class="variable">$&#123;backup_dir&#125;</span> -<span class="built_in">type</span>  f -name <span class="string">&quot;*.tar.gz&quot;</span> -mtime +7 |xargs  <span class="built_in">rm</span> -f</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><h4 id="5）服务端脚本测试"><a href="#5）服务端脚本测试" class="headerlink" title="5）服务端脚本测试"></a>5）服务端脚本测试</h4><p>checkbak.sh</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/etc/bash</span></span><br><span class="line"><span class="comment">#desc:检查旧的备份并删除</span></span><br><span class="line"></span><br><span class="line">result_file=/server/scripts/result.txt</span><br><span class="line"></span><br><span class="line"><span class="comment">#0.清理旧备份</span></span><br><span class="line">find /backup/ -<span class="built_in">type</span> f -name <span class="string">&quot;*.tar.gz&quot;</span> -mtime +180  |xargs <span class="built_in">rm</span> -f </span><br><span class="line"><span class="comment">#1.统计备份结果</span></span><br><span class="line">find /backup/ -<span class="built_in">type</span> f -name <span class="string">&quot;*.tar.gz&quot;</span> |xargs \</span><br><span class="line"><span class="built_in">ls</span> -lhd |\</span><br><span class="line">awk -F <span class="string">&#x27;[ /]+&#x27;</span> <span class="string">&#x27;&#123;print $(NF-1),$NF,$5 &#125;&#x27;</span> |\</span><br><span class="line">column -t &gt; <span class="variable">$&#123;result_file&#125;</span> </span><br><span class="line"></span><br><span class="line"><span class="comment">#校验</span></span><br><span class="line">find /backup/ -name <span class="string">&quot;fingerprint.md5&quot;</span> |xargs <span class="built_in">md5sum</span> -c &amp;&gt;&gt;<span class="variable">$&#123;result_file&#125;</span>    </span><br><span class="line"></span><br><span class="line"><span class="comment">#2.发送结果</span></span><br><span class="line">mail -s <span class="string">&quot;每日备份结果&quot;</span> 1296959377@qq.com &lt;<span class="variable">$&#123;result_file&#125;</span>  </span><br></pre></td></tr></table></figure>
+
+</li>
+<li><h4 id="6）增加校验功能"><a href="#6）增加校验功能" class="headerlink" title="6）增加校验功能"></a>6）增加校验功能</h4></li>
+</ul>
+<p>单个文件的校验</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#创建oldboy.txt测试文件</span></span><br><span class="line"><span class="built_in">echo</span> oldboy &gt;oldboy.txt</span><br><span class="line"><span class="comment">#创建md5的值</span></span><br><span class="line"><span class="built_in">md5sum</span> oldboy.txt</span><br><span class="line">3fe396c01f03425cb5e2da8186eb090do1db0y.txt<span class="comment">#MD5值和文件名</span></span><br><span class="line"><span class="comment">#保存md5值到文件</span></span><br><span class="line"><span class="built_in">md5sum</span></span><br><span class="line">oldboy.txt &lt;oldboy.md5</span><br><span class="line"><span class="comment">#通过md5值文件，校验文件的md5信息（文件是否变化）</span></span><br><span class="line"><span class="built_in">md5sum</span> -c</span><br><span class="line">oldboy.md5</span><br><span class="line">oldboy.txt:0K<span class="comment">#0K表示没有改变</span></span><br><span class="line"><span class="comment">#修改文件内容，测试MD5是否能发现文件是否变化.</span></span><br><span class="line"><span class="built_in">echo</span> lidao &gt;oldboy.txt</span><br><span class="line"><span class="comment">#进行md5检查</span></span><br><span class="line"><span class="built_in">md5sum</span> -c oldboy.md5</span><br><span class="line">oldboy.txt:FAILED<span class="comment">#FAILED表示文件内容发生变化，md5值变了.</span></span><br><span class="line"><span class="built_in">md5sum</span>:WARNING:1 computed checksum did NOT match</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>md5sum-c说明-check根据md5文件记录进行对比<br>md5值   	路径&#x2F;名字</p>
+</blockquote>
+<p>多个文件的校验</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#给/etc/下面所有的文件创建ND5保存到指定文件中</span></span><br><span class="line">find /etc/-type f <span class="built_in">md5sum</span></span><br><span class="line">&gt;etc-all.md5</span><br><span class="line"><span class="comment">#进行校验</span></span><br><span class="line"><span class="built_in">md5sum</span> -c etc-all.md5</span><br><span class="line"><span class="comment">#修改/etc/下某个文件比如增加个&quot;#&quot;</span></span><br><span class="line">vim /etc/rsyncd.conf</span><br><span class="line"><span class="comment">#进行校验</span></span><br><span class="line"><span class="built_in">md5sum</span> -c etc-all.md5</span><br><span class="line"><span class="comment">#只显示md5异常的文件</span></span><br><span class="line"><span class="built_in">md5sum</span> --quiet -c etc-all.md5</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-数据服务-存储服务"><a href="#2-数据服务-存储服务" class="headerlink" title="2.数据服务-存储服务"></a>2.数据服务-存储服务</h2><h3 id="1）环境说明"><a href="#1）环境说明" class="headerlink" title="1）环境说明"></a>1）环境说明</h3><table>
+<thead>
+<tr>
+<th>主机</th>
+<th>运行服务</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>nfs01 10.0.0.31</td>
+<td>nfs 服务端</td>
+<td></td>
+</tr>
+<tr>
+<td>web01 10.0.0.7</td>
+<td>nfs 客户端</td>
+<td>通过挂载使用</td>
+</tr>
+</tbody></table>
+<h3 id="2）服务端部署"><a href="#2）服务端部署" class="headerlink" title="2）服务端部署"></a>2）服务端部署</h3><ul>
+<li><p>部署</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y rpcbind nfs-utils</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>启动</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#启动rpcbind</span><br><span class="line">systemctl enable rpcbind</span><br><span class="line">systemctl start rpcbind</span><br><span class="line">rpcinfo -p</span><br><span class="line">#启动nfs</span><br><span class="line">systemctl enable nfs</span><br><span class="line">systemctl start nfs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>NFS服务端的配置文件 <code>/etc/exports</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/data/	172.16.1.0/24(rw)&#x27;</span> &gt;&gt; /etc/exports</span><br><span class="line"><span class="comment">#配置表示：172.16.1.0/24网段对NFS服务端的/data/目录，拥有rw读写权限</span></span><br><span class="line">systemctl reload nfs</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>reload 表示优雅重启，不会断开已有连接</p>
+<p>restart在nfs中，会导致客户端一段时间卡住</p>
+</blockquote>
+</li>
+<li><p>NFS创建数据目录修改权限</p>
+</li>
+</ul>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir -d /data/</span><br><span class="line">chown nfsnobody.nfsnobody /data/</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="3）客户端挂载"><a href="#3）客户端挂载" class="headerlink" title="3）客户端挂载"></a>3）客户端挂载</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install -y nfs-utils</span><br><span class="line">mount -t nfs 172.16.1.31:/data /mnt</span><br></pre></td></tr></table></figure>
+
+<h3 id="NFS相关文件"><a href="#NFS相关文件" class="headerlink" title="NFS相关文件"></a>NFS相关文件</h3><table>
+<thead>
+<tr>
+<th>nfs服务端或客户端</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NFS服务端配置</td>
+<td>&#x2F;etc&#x2F;exports(配置文件里面的) -&gt; &#x2F;var&#x2F;lib&#x2F;nfs&#x2F;etab(当前使用的nfs服务端配置)</td>
+</tr>
+<tr>
+<td>NFS客户端配置</td>
+<td>客户端：mount  &#x2F;etc&#x2F;rc.local 或&#x2F;etc&#x2F;fstab -&gt; &#x2F;proc&#x2F;mounts(当前系统的挂载情况)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>nfs 客户端永久挂载</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#方法01挂载命令写入到/etc/rc.Local</span></span><br><span class="line"><span class="built_in">chmod</span> +x /etc/rc.d/rc.Local</span><br><span class="line"></span><br><span class="line"><span class="comment">#方法02按照/etc/fstab格式要求书写</span></span><br><span class="line">设备 								挂载点 		文件系统类型 		挂载参数 		是否检查		是否备份</span><br><span class="line">172.16.1.31:/data/ /upload/ 		nfs 				defaults 		0 					0</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>温馨提示：</p>
+<p>如果配置了nfs客户端永久挂载，需要优先启动nfs服务端</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="NFS服务端配置文件"><a href="#NFS服务端配置文件" class="headerlink" title="NFS服务端配置文件"></a>NFS服务端配置文件</h3><ul>
+<li>核心配置</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>服务端配置选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rw</td>
+<td>可以读写共享目录</td>
+</tr>
+<tr>
+<td>ro</td>
+<td>只读read only</td>
+</tr>
+<tr>
+<td>sync</td>
+<td>同步，只要用户上传，就把数据写到磁盘上，</td>
+</tr>
+<tr>
+<td>async</td>
+<td>异步，用户上传的数据，nfs先临时存放到内存中，过一段时间写入到磁盘.并发高，数据可能丢失</td>
+</tr>
+</tbody></table>
+<h3 id="4）服务端用户压缩"><a href="#4）服务端用户压缩" class="headerlink" title="4）服务端用户压缩"></a>4）服务端用户压缩</h3><table>
+<thead>
+<tr>
+<th>服务端配置选项-用户压缩</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>root_squash</td>
+<td>如果客户端是root用户访问，则到了nfs服务端会被压缩（默认的）</td>
+</tr>
+<tr>
+<td>no_all_squash</td>
+<td>如果客户端不是root用户访问，则不进行压缩（保存原始用户，默认的）</td>
+</tr>
+<tr>
+<td>all_squash</td>
+<td>所有用户都进行压缩（不是太安全）</td>
+</tr>
+<tr>
+<td>anonuid和anongid</td>
+<td>用于指定压缩的匿名用户（默认是nfsnobody用户）</td>
+</tr>
+</tbody></table>
+<h3 id="5）用户压缩案例"><a href="#5）用户压缩案例" class="headerlink" title="5）用户压缩案例"></a>5）用户压缩案例</h3><ul>
+<li>用户压缩案例：设置&#x2F;nfsdata共享目录，匿名用户为Www.客户端挂载到&#x2F;upload-video&#x2F;</li>
+<li>www用户的uid,gid:1999</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.所有主机(nfs服务端和nfs客户端)添加用户www uid:统一1999 1999</span></span><br><span class="line">groupadd -g 1999 www</span><br><span class="line">useradd  -u 1999 -g www -s /sbin/nologin -M www</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.nfs服务端配置</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;/nfsdata/ 172.16.1.0/24(rw,all_squash,anonuid=1999,anongid=1999)&#x27;</span> &gt;&gt;/etc/exports</span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> -p /nfsdata/</span><br><span class="line"><span class="built_in">chown</span> www.www /nfsdata/</span><br><span class="line"></span><br><span class="line"><span class="comment">#3.nfs客户端挂载</span></span><br><span class="line">mount -t nfs 172.16.1.31:/nfsdata/ /upload-video/</span><br><span class="line"><span class="built_in">mkdir</span> -p /upload-video/</span><br><span class="line"><span class="built_in">touch</span> abc&#123;1..10&#125;.mp4</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="NFS优化"><a href="#NFS优化" class="headerlink" title="NFS优化"></a>NFS优化</h3><ul>
+<li><p>终极优化目标：</p>
+<ul>
+<li>尽可能让用户的请求在访问网站架构之前解决掉。（尽可能把用户的请求往前推）</li>
+</ul>
+</li>
+<li><p>NFS优化：硬件（物理服务器+nfs服务）</p>
+</li>
+<li><p>NFS安全优化：客户端挂载只能上传，无法执行.</p>
+</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> mount -o noexec,nosuid,nodev -t nfs 172.16.1.31:/data /video/</span><br><span class="line"><span class="comment">#这几个是客户端挂载选项</span></span><br><span class="line"><span class="comment">#noexec 挂载的nfs目录中如果有命令，无法运行</span></span><br><span class="line"><span class="comment">#nouid 带有suid的命令</span></span><br><span class="line"><span class="comment">#nodev 带有特殊属性的文件</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>NFS有单点故障，选择其他存储：公有云0SS(阿里云)（对象存储在代码里面调用）</li>
+<li>课后研究分布式存储：GLusterFS(GFS)</li>
+</ul>
+<h2 id="3-实时同步存储服务"><a href="#3-实时同步存储服务" class="headerlink" title="3.实时同步存储服务"></a>3.实时同步存储服务</h2><table>
+<thead>
+<tr>
+<th>作用</th>
+<th>服务器</th>
+<th>环境准备</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rsync服务端</td>
+<td>10.0.0.31backup01</td>
+<td>完成rsync服务端部署</td>
+</tr>
+<tr>
+<td>sersync服务端（rsync客户端）nfs服务器</td>
+<td>10.0.0.41 nfs01</td>
+<td>解压安装<br />配置sersync<br />配置并创建nfs共享目录文件</td>
+</tr>
+<tr>
+<td>用户客户端</td>
+<td>10.0.0.7 web01</td>
+<td>挂载到nfs01共享目录</td>
+</tr>
+</tbody></table>
+<p><code>Sersync2/confxml.xml</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span>        </span><br><span class="line">&lt;<span class="built_in">head</span> version=<span class="string">&quot;2.5&quot;</span>&gt;</span><br><span class="line">    &lt;host hostip=<span class="string">&quot;localhost&quot;</span> port=<span class="string">&quot;8008&quot;</span>&gt;&lt;/host&gt;</span><br><span class="line">    &lt;debug start=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">    &lt;fileSystem xfs=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">    &lt;filter start=<span class="string">&quot;false&quot;</span>&gt;</span><br><span class="line">        &lt;exclude expression=<span class="string">&quot;(.*)\.svn&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">        &lt;exclude expression=<span class="string">&quot;(.*)\.gz&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">        &lt;exclude expression=<span class="string">&quot;^info/*&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">        &lt;exclude expression=<span class="string">&quot;^static/*&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">    &lt;/filter&gt;</span><br><span class="line">    &lt;inotify&gt;</span><br><span class="line">        &lt;delete start=<span class="string">&quot;true&quot;</span>/&gt;</span><br><span class="line">        &lt;createFolder start=<span class="string">&quot;true&quot;</span>/&gt;</span><br><span class="line">        &lt;createFile start=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">        &lt;closeWrite start=<span class="string">&quot;true&quot;</span>/&gt;</span><br><span class="line">        &lt;moveFrom start=<span class="string">&quot;true&quot;</span>/&gt;</span><br><span class="line">        &lt;moveTo start=<span class="string">&quot;true&quot;</span>/&gt;</span><br><span class="line">        &lt;attrib start=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">        &lt;modify start=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">    &lt;/inotify&gt;</span><br><span class="line"></span><br><span class="line">    &lt;sersync&gt;</span><br><span class="line">        &lt;localpath watch=<span class="string">&quot;/opt/tongbu&quot;</span>&gt;</span><br><span class="line">            &lt;remote ip=<span class="string">&quot;127.0.0.1&quot;</span> name=<span class="string">&quot;tongbu1&quot;</span>/&gt;</span><br><span class="line">            &lt;!--&lt;remote ip=<span class="string">&quot;192.168.8.39&quot;</span> name=<span class="string">&quot;tongbu&quot;</span>/&gt;--&gt;</span><br><span class="line">            &lt;!--&lt;remote ip=<span class="string">&quot;192.168.8.40&quot;</span> name=<span class="string">&quot;tongbu&quot;</span>/&gt;--&gt;</span><br><span class="line">        &lt;/localpath&gt;</span><br><span class="line">        &lt;rsync&gt;</span><br><span class="line">            &lt;commonParams params=<span class="string">&quot;-artuz&quot;</span>/&gt;</span><br><span class="line">            &lt;auth start=<span class="string">&quot;false&quot;</span> <span class="built_in">users</span>=<span class="string">&quot;root&quot;</span> passwordfile=<span class="string">&quot;/etc/rsync.pas&quot;</span>/&gt;</span><br><span class="line">            &lt;userDefinedPort start=<span class="string">&quot;false&quot;</span> port=<span class="string">&quot;874&quot;</span>/&gt;&lt;!-- port=874 --&gt;</span><br><span class="line">            &lt;<span class="built_in">timeout</span> start=<span class="string">&quot;false&quot;</span> time=<span class="string">&quot;100&quot;</span>/&gt;&lt;!-- <span class="built_in">timeout</span>=100 --&gt;</span><br><span class="line">            &lt;ssh start=<span class="string">&quot;false&quot;</span>/&gt;</span><br><span class="line">        &lt;/rsync&gt;</span><br><span class="line">        &lt;failLog path=<span class="string">&quot;/tmp/rsync_fail_log.sh&quot;</span> timeToExecute=<span class="string">&quot;60&quot;</span>/&gt;&lt;!--default every 60mins execute once--&gt;</span><br><span class="line">        &lt;crontab start=<span class="string">&quot;false&quot;</span> schedule=<span class="string">&quot;600&quot;</span>&gt;&lt;!--600mins--&gt;</span><br><span class="line">            &lt;crontabfilter start=<span class="string">&quot;false&quot;</span>&gt;</span><br><span class="line">                &lt;exclude expression=<span class="string">&quot;*.php&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">                &lt;exclude expression=<span class="string">&quot;info/*&quot;</span>&gt;&lt;/exclude&gt;</span><br><span class="line">            &lt;/crontabfilter&gt;</span><br><span class="line">        &lt;/crontab&gt;</span><br><span class="line">        &lt;plugin start=<span class="string">&quot;false&quot;</span> name=<span class="string">&quot;command&quot;</span>/&gt;</span><br><span class="line">    &lt;/sersync&gt;</span><br><span class="line"></span><br><span class="line">    &lt;plugin name=<span class="string">&quot;command&quot;</span>&gt;</span><br><span class="line">        &lt;param prefix=<span class="string">&quot;/bin/sh&quot;</span> suffix=<span class="string">&quot;&quot;</span> ignoreError=<span class="string">&quot;true&quot;</span>/&gt;  &lt;!--prefix /opt/tongbu/mmm.sh suffix--&gt;</span><br><span class="line">        &lt;filter start=<span class="string">&quot;false&quot;</span>&gt;</span><br><span class="line">            &lt;include expression=<span class="string">&quot;(.*)\.php&quot;</span>/&gt;</span><br><span class="line">            &lt;include expression=<span class="string">&quot;(.*)\.sh&quot;</span>/&gt;</span><br><span class="line">        &lt;/filter&gt;</span><br><span class="line">    &lt;/plugin&gt;</span><br><span class="line"></span><br><span class="line">    &lt;plugin name=<span class="string">&quot;socket&quot;</span>&gt;</span><br><span class="line">        &lt;localpath watch=<span class="string">&quot;/opt/tongbu&quot;</span>&gt;</span><br><span class="line">            &lt;deshost ip=<span class="string">&quot;192.168.138.20&quot;</span> port=<span class="string">&quot;8009&quot;</span>/&gt;</span><br><span class="line">        &lt;/localpath&gt;</span><br><span class="line">    &lt;/plugin&gt;</span><br><span class="line">    &lt;plugin name=<span class="string">&quot;refreshCDN&quot;</span>&gt;</span><br><span class="line">        &lt;localpath watch=<span class="string">&quot;/data0/htdocs/cms.xoyo.com/site/&quot;</span>&gt;</span><br><span class="line">            &lt;cdninfo domainname=<span class="string">&quot;ccms.chinacache.com&quot;</span> port=<span class="string">&quot;80&quot;</span> username=<span class="string">&quot;xxxx&quot;</span> passwd=<span class="string">&quot;xxxx&quot;</span>/&gt;</span><br><span class="line">            &lt;sendurl base=<span class="string">&quot;http://pic.xoyo.com/cms&quot;</span>/&gt;</span><br><span class="line">            &lt;regexurl regex=<span class="string">&quot;false&quot;</span> match=<span class="string">&quot;cms.xoyo.com/site([/a-zA-Z0-9]*).xoyo.com/images&quot;</span>/&gt;</span><br><span class="line">        &lt;/localpath&gt;</span><br><span class="line">    &lt;/plugin&gt;</span><br><span class="line">&lt;/head&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-SSHD服务"><a href="#4-SSHD服务" class="headerlink" title="4.SSHD服务"></a>4.SSHD服务</h2><p>openssh服务和telnet服务</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>共同点</th>
+<th>区别</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>openssh 服务</td>
+<td>远程连接</td>
+<td>数据加密的</td>
+<td>默认使用openssh</td>
+</tr>
+<tr>
+<td>telnet 服务</td>
+<td>远程连接</td>
+<td>数据未加密</td>
+<td>升级openssh服务时，可启用telnet服务</td>
+</tr>
+</tbody></table>
+<ul>
+<li>telnet服务</li>
+</ul>
+<p>	</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">安装服务</span><br><span class="line">yum install</span><br><span class="line">-y telnet-server</span><br><span class="line"><span class="comment">#启动</span></span><br><span class="line">systemctl <span class="built_in">disable</span> telnet.socket</span><br><span class="line">systemctl start telnet.socket</span><br><span class="line"><span class="comment">#本地shell中连接</span></span><br><span class="line">telnet10.0.0.61 23</span><br></pre></td></tr></table></figure>
+
+<h3 id="openssh-server配置文件"><a href="#openssh-server配置文件" class="headerlink" title="openssh-server配置文件"></a>openssh-server配置文件</h3><ul>
+<li>核心配置文件：<code>/etc/ssh/sshd_config</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Openssh服务端配置详解</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>连接加速</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>UseDNS no</td>
+<td>是否开启反向解析：ip→域名或主机名</td>
+</tr>
+<tr>
+<td>GSSAPIAuthentication</td>
+<td>GSS认证功能关闭</td>
+</tr>
+<tr>
+<td><strong>安全优化相关</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>Port</td>
+<td>默认是Pont22 端口范围1-65535<br/>推荐1w以上的端口</td>
+</tr>
+<tr>
+<td>PermitRootLogin</td>
+<td>禁用root用户远程登录权限.默认是yes(可以让root远程登录)(ubt系统中默认是no)</td>
+</tr>
+<tr>
+<td>ListenAddress</td>
+<td>监听的地址（后面需要指定本地网卡的p地址）可以控制用户只能通过内网访问</td>
+</tr>
+</tbody></table>
+<h2 id="5-集群批量管理-密钥认证与ansible模块"><a href="#5-集群批量管理-密钥认证与ansible模块" class="headerlink" title="5.集群批量管理-密钥认证与ansible模块"></a>5.集群批量管理-密钥认证与ansible模块</h2><ul>
+<li>部署密钥认证</li>
+<li>ansible批量管理-部署-分发</li>
+<li>ansible的常用模块</li>
+</ul>
+<h3 id="密钥认证"><a href="#密钥认证" class="headerlink" title="密钥认证"></a>密钥认证</h3><ol>
+<li><p>创建密钥对</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>分发公钥</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i /root/.ssh/id_rsa.pub root@10.0.41</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接测试</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh root@10.0.41 hostname -I</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自动化创建密钥</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -f ~/.ssh/id_rsa -P <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#-f用于指定私钥的位置</span></span><br><span class="line"><span class="comment">#-P密码短语设置为空</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>自动化分发</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#安装密码提供密码</span></span><br><span class="line">yum install -y sshpass</span><br><span class="line"><span class="comment">#sshpass命令基本使用</span></span><br><span class="line"><span class="comment">#-p指定密码</span></span><br><span class="line"></span><br><span class="line">ssh10.0.0.7 hostname-I <span class="comment">#检查是否需要输入yes/no</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#然后使用：</span></span><br><span class="line">sshpass -p1 ssh 10.0.0.7 hostname -I</span><br><span class="line"></span><br><span class="line"><span class="comment">#使用sshpass与ssh-copy-id分发公钥</span></span><br><span class="line">ssh-copy-id 10.0.0.31 <span class="comment">#检查是否需要输入yes/no</span></span><br><span class="line"><span class="comment">#然后使用：</span></span><br><span class="line">sshpass -p1 ssh-copy-id 10.0.0.31</span><br><span class="line"></span><br><span class="line"><span class="comment">#第一次连接时候提示yes/no 临时不检查主机信息 -oStrictHostKeyChecking</span></span><br><span class="line">sshpass -p1 ssh-copy-id -i ~/ssh/id_rsa.pub -oStrictHostKeyChecking=no 10.0.0.41</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自动分发脚本 <code>fenfa.sh</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">   </span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="Absible自动维护"><a href="#Absible自动维护" class="headerlink" title="Absible自动维护"></a>Absible自动维护</h3><p><code>/etc/ansible/ansible.cfg</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#关闭取消验证</span><br><span class="line">#开启日志</span><br><span class="line">71:host_key_checking =False</span><br><span class="line">111:log_path=/var/log/ansible.log</span><br></pre></td></tr></table></figure>
+
+<p>主机清单文件  <code>/etc/ansible/host</code></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">172.16.1.7</span><br><span class="line">172.16.1.8</span><br><span class="line">[nfs]</span><br><span class="line">172.16.1.31</span><br><span class="line">[backup]</span><br><span class="line">172.16.1.41</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#子组 组名:children</span></span><br><span class="line">[data:children]</span><br><span class="line">backup</span><br><span class="line">nfs</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行ansible</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ansible all -m ping <span class="comment">#所有的主机</span></span><br><span class="line">andible web - m ping <span class="comment">#web分组的主机</span></span><br><span class="line">andible 172.16.1.x - m ping <span class="comment">#某个主机</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Ansible模块"><a href="#Ansible模块" class="headerlink" title="Ansible模块"></a>Ansible模块</h3><ul>
+<li>ansible中的模块就类似于Linux中的命令，我们Linux命令管理系统，我们通过andible模块实现批量管理</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模块分类</th>
+<th>模块</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>命令和脚本模块</td>
+<td>command模块：默认的模块，支持简单的命令不支持特殊符号</td>
+</tr>
+<tr>
+<td></td>
+<td>shell 模块：执行命令，支持特殊符号</td>
+</tr>
+<tr>
+<td></td>
+<td>script模块：分发脚本并执行</td>
+</tr>
+<tr>
+<td>文件</td>
+<td>file ：创建目录，文件，软连接</td>
+</tr>
+<tr>
+<td></td>
+<td>copy：远程分发文件，修改权限，所有者，备份</td>
+</tr>
+<tr>
+<td></td>
+<td>systemd：服务管理</td>
+</tr>
+<tr>
+<td></td>
+<td>service：服务管理（了解）</td>
+</tr>
+<tr>
+<td>软件包</td>
+<td>yum源 yum_repository</td>
+</tr>
+<tr>
+<td></td>
+<td>yum命令</td>
+</tr>
+<tr>
+<td></td>
+<td>get_url 下载软甲</td>
+</tr>
+<tr>
+<td>系统管理</td>
+<td>mount模块 挂载</td>
+</tr>
+<tr>
+<td></td>
+<td>cron模块 定时任务</td>
+</tr>
+<tr>
+<td>用户管理</td>
+<td>group模块 管理用户组</td>
+</tr>
+<tr>
+<td></td>
+<td>user模块 管理用户</td>
+</tr>
+<tr>
+<td>其他</td>
+<td>压缩解压(unarchive),rsync模块(synchronize),数据库模块(mysql_db,mysql_user)…</td>
+</tr>
+<tr>
+<td></td>
+<td>ansible管理docker k8s zabbix grafana…</td>
+</tr>
+<tr>
+<td>用于调试检查</td>
+<td>ping模块检查ansible与其他节点连通性.</td>
+</tr>
+<tr>
+<td></td>
+<td>debug模块 用于检查&#x2F;显示变量</td>
+</tr>
+</tbody></table>
+<p>ansible选项</p>
+<table>
+<thead>
+<tr>
+<th>ansible</th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-i 指定主机清单文件</td>
+<td></td>
+</tr>
+<tr>
+<td>-m 指定模块</td>
+<td></td>
+</tr>
+<tr>
+<td>-a 指定模块中的选项</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<ul>
+<li><h3 id="Command-模块"><a href="#Command-模块" class="headerlink" title="Command 模块"></a>Command 模块</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#批量获取主机名(ansible 默认command模块)</span></span><br><span class="line">ansible all -a <span class="string">&#x27;hostname&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><h3 id="shell模块"><a href="#shell模块" class="headerlink" title="shell模块"></a>shell模块</h3><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#批量获取ip地址</span></span><br><span class="line">ansible all -m shell -a <span class="string">&quot;ip a s eth0 | awk -F&#x27;[/ ]+&#x27; &#x27;NR==3&#123;print \$3&#125;&#x27;</span></span><br><span class="line"><span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>:warning: 温馨提示：<br>shell模块不推荐执行较为复杂的指令，如果需要执行放在脚本中执行.<br>避免因为特殊符号和引号导致的问题.</p>
+</blockquote>
+</li>
+<li><h3 id="script模块"><a href="#script模块" class="headerlink" title="script模块"></a>script模块</h3><ul>
+<li>执行流程：分发脚本，在被管理端运行脚本</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!bin/bash</span></span><br><span class="line"><span class="comment">#author:lidao996</span></span><br><span class="line"><span class="comment">#desc:系统巡检脚本</span></span><br><span class="line">nostname</span><br><span class="line">hostname -I</span><br><span class="line">ip a s eth0 | awk -F<span class="string">&#x27;[/ ]+&#x27;</span> <span class="string">&#x27;NR==3&#123;print $3&#125;&#x27;</span></span><br><span class="line"><span class="built_in">uptime</span></span><br><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">date</span> +%F</span><br><span class="line"><span class="built_in">sleep</span> 10</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#测试巡检脚本</span></span><br><span class="line">ansible all -m script -a <span class="string">&#x27;/server/scripts/sys_info.sh&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><h3 id="file模块"><a href="#file模块" class="headerlink" title="file模块"></a>file模块</h3><blockquote>
+<p>file模块不仅可以创建文件，还可以管理目录，管理软连接</p>
+</blockquote>
+<p>file模块选项</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><h3 id="copy模块"><a href="#copy模块" class="headerlink" title="copy模块"></a>copy模块</h3></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/02/23/hexo%E7%AC%94%E8%AE%B0/" rel="prev" title="hexo笔记">
+      <i class="fa fa-chevron-left"></i> hexo笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">综合架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">什么是综合架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">新的要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">综合架构详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">5.</span> <span class="nav-text">技术栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1"><span class="nav-number">6.</span> <span class="nav-text">1.备份服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reync%E5%8F%82%E6%95%B0%E9%80%89%E9%A1%B9"><span class="nav-number">6.1.</span> <span class="nav-text">reync参数选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsync%E4%BC%81%E4%B8%9A%E5%BA%94%E7%94%A8"><span class="nav-number">6.2.</span> <span class="nav-text">rsync企业应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsunc%E4%B8%8D%E5%90%8C%E6%A8%A1%E5%BC%8F"><span class="nav-number">6.3.</span> <span class="nav-text">rsunc不同模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD%E9%A1%B9%E7%9B%AE"><span class="nav-number">6.4.</span> <span class="nav-text">项目：全网备份项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%EF%BC%89%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">6.4.1.</span> <span class="nav-text">1）环境准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%EF%BC%89%E9%A1%B9%E7%9B%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">6.4.2.</span> <span class="nav-text">2）项目步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%EF%BC%89rsync%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B0%83%E8%AF%95"><span class="nav-number">6.4.3.</span> <span class="nav-text">3）rsync服务端调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC"><span class="nav-number">6.4.4.</span> <span class="nav-text">4）客户端备份脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%84%9A%E6%9C%AC%E6%B5%8B%E8%AF%95"><span class="nav-number">6.4.5.</span> <span class="nav-text">5）服务端脚本测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%EF%BC%89%E5%A2%9E%E5%8A%A0%E6%A0%A1%E9%AA%8C%E5%8A%9F%E8%83%BD"><span class="nav-number">6.4.6.</span> <span class="nav-text">6）增加校验功能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1-%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">7.</span> <span class="nav-text">2.数据服务-存储服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="nav-number">7.1.</span> <span class="nav-text">1）环境说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="nav-number">7.2.</span> <span class="nav-text">2）服务端部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8C%82%E8%BD%BD"><span class="nav-number">7.3.</span> <span class="nav-text">3）客户端挂载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="nav-number">7.4.</span> <span class="nav-text">NFS相关文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">7.5.</span> <span class="nav-text">NFS服务端配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%94%A8%E6%88%B7%E5%8E%8B%E7%BC%A9"><span class="nav-number">7.6.</span> <span class="nav-text">4）服务端用户压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%EF%BC%89%E7%94%A8%E6%88%B7%E5%8E%8B%E7%BC%A9%E6%A1%88%E4%BE%8B"><span class="nav-number">7.7.</span> <span class="nav-text">5）用户压缩案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E4%BC%98%E5%8C%96"><span class="nav-number">7.8.</span> <span class="nav-text">NFS优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">8.</span> <span class="nav-text">3.实时同步存储服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-SSHD%E6%9C%8D%E5%8A%A1"><span class="nav-number">9.</span> <span class="nav-text">4.SSHD服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openssh-server%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">9.1.</span> <span class="nav-text">openssh-server配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%9B%86%E7%BE%A4%E6%89%B9%E9%87%8F%E7%AE%A1%E7%90%86-%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81%E4%B8%8Eansible%E6%A8%A1%E5%9D%97"><span class="nav-number">10.</span> <span class="nav-text">5.集群批量管理-密钥认证与ansible模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81"><span class="nav-number">10.1.</span> <span class="nav-text">密钥认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Absible%E8%87%AA%E5%8A%A8%E7%BB%B4%E6%8A%A4"><span class="nav-number">10.2.</span> <span class="nav-text">Absible自动维护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ansible%E6%A8%A1%E5%9D%97"><span class="nav-number">10.3.</span> <span class="nav-text">Ansible模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Command-%E6%A8%A1%E5%9D%97"><span class="nav-number">10.4.</span> <span class="nav-text">Command 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell%E6%A8%A1%E5%9D%97"><span class="nav-number">10.5.</span> <span class="nav-text">shell模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script%E6%A8%A1%E5%9D%97"><span class="nav-number">10.6.</span> <span class="nav-text">script模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file%E6%A8%A1%E5%9D%97"><span class="nav-number">10.7.</span> <span class="nav-text">file模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy%E6%A8%A1%E5%9D%97"><span class="nav-number">10.8.</span> <span class="nav-text">copy模块</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">John Doe</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
