@@ -1,200 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 6.2.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>集群架构学习.md - 残无痕</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="残无痕"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="残无痕"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="综合架构项目，包括各种服务以及集群搭建"><meta property="og:type" content="blog"><meta property="og:title" content="集群架构学习.md"><meta property="og:url" content="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/"><meta property="og:site_name" content="残无痕"><meta property="og:description" content="综合架构项目，包括各种服务以及集群搭建"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://example.com/img/og_image.png"><meta property="article:published_time" content="2024-02-27T14:36:03.000Z"><meta property="article:modified_time" content="2024-03-14T04:36:03.000Z"><meta property="article:author" content="John Doe"><meta property="twitter:card" content="summary"><meta property="twitter:image:src" content="http://example.com/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/"},"headline":"集群架构学习.md","image":["http://example.com/img/og_image.png"],"datePublished":"2024-02-27T14:36:03.000Z","dateModified":"2024-03-14T04:36:03.000Z","author":{"@type":"Person","name":"John Doe"},"publisher":{"@type":"Organization","name":"残无痕","logo":{"@type":"ImageObject","url":"http://example.com/img/logo.svg"}},"description":"综合架构项目，包括各种服务以及集群搭建"}</script><link rel="canonical" href="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
 
-<link rel="stylesheet" href="/css/main.css">
+          const id = '#' + CSS.escape(location.hash.substring(1));
+          const $tabMenu = document.querySelector(`.tabs a[href="${id}"]`);
+          if (!$tabMenu) {
+            return;
+          }
 
+          const $tabMenuContainer = $tabMenu.parentElement.parentElement;
+          Array.from($tabMenuContainer.children).forEach($menu => $menu.classList.remove('is-active'));
+          Array.from($tabMenuContainer.querySelectorAll('a'))
+              .map($menu => document.getElementById($menu.getAttribute("href").substring(1)))
+              .forEach($content => $content.classList.add('is-hidden'));
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
-  </script>
-
-  <meta name="description" content="host 解析 123456789101112cat &gt;&gt;&#x2F;etc&#x2F;hosts &lt;&lt;EOF172.16.1.5 lb01172.16.1.6 lb01172.16.1.7 web01172.16.1.8 web02172.16.1.9 web03172.16.1.10 web04172.16.1.31 nfs01172.16.1.41 backup172.16.1.51 d">
-<meta property="og:type" content="article">
-<meta property="og:title" content="集群架构学习.md">
-<meta property="og:url" content="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/index.html">
-<meta property="og:site_name" content="残无痕">
-<meta property="og:description" content="host 解析 123456789101112cat &gt;&gt;&#x2F;etc&#x2F;hosts &lt;&lt;EOF172.16.1.5 lb01172.16.1.6 lb01172.16.1.7 web01172.16.1.8 web02172.16.1.9 web03172.16.1.10 web04172.16.1.31 nfs01172.16.1.41 backup172.16.1.51 d">
-<meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-02-27T14:36:03.000Z">
-<meta property="article:modified_time" content="2024-03-13T04:36:03.000Z">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-
-<link rel="canonical" href="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'en'
-  };
-</script>
-
-  <title>集群架构学习.md | 残无痕</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="Toggle navigation bar">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">残无痕</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
-
-  </li>
-  </ul>
-</nav>
-
-
-
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content post posts-expand">
-            
-
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="残无痕">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          集群架构学习.md
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2024-02-27 22:36:03" itemprop="dateCreated datePublished" datetime="2024-02-27T22:36:03+08:00">2024-02-27</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-03-13 12:36:03" itemprop="dateModified" datetime="2024-03-13T12:36:03+08:00">2024-03-13</time>
-              </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-        <p>host 解析</p>
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+          const $activeTab = document.querySelector(id);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.2.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="残无痕" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item">Posted&nbsp;<time dateTime="2024-02-27T14:36:03.000Z" title="2024/2/27 下午10:36:03">2024-02-27</time></span><span class="level-item">Updated&nbsp;<time dateTime="2024-03-14T04:36:03.000Z" title="2024/3/14 下午12:36:03">2024-03-14</time></span><span class="level-item">25 minutes read (About 3695 words)</span></div></div><h1 class="title is-3 is-size-4-mobile">集群架构学习.md</h1><div class="content"><p>综合架构项目，包括各种服务以及集群搭建</p>
+<span id="more"></span>
+<p>host 解析</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">cat &gt;&gt;/etc/hosts &lt;&lt;EOF</span><br><span class="line">172.16.1.5 lb01</span><br><span class="line">172.16.1.6 lb01</span><br><span class="line">172.16.1.7 web01</span><br><span class="line">172.16.1.8 web02</span><br><span class="line">172.16.1.9 web03</span><br><span class="line">172.16.1.10 web04</span><br><span class="line">172.16.1.31 nfs01</span><br><span class="line">172.16.1.41 backup</span><br><span class="line">172.16.1.51 db01</span><br><span class="line">172.16.1.61 m01</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
 
 
@@ -974,188 +811,48 @@
 </li>
 <li><h3 id="copy模块"><a href="#copy模块" class="headerlink" title="copy模块"></a>copy模块</h3></li>
 </ul>
-
-    </div>
-
-    
-    
-    
-
-      <footer class="post-footer">
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2024/02/23/hexo%E7%AC%94%E8%AE%B0/" rel="prev" title="hexo笔记">
-      <i class="fa fa-chevron-left"></i> hexo笔记
-    </a></div>
-      <div class="post-nav-item"></div>
-    </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          Table of Contents
-        </li>
-        <li class="sidebar-nav-overview">
-          Overview
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84"><span class="nav-number">1.</span> <span class="nav-text">综合架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84"><span class="nav-number">2.</span> <span class="nav-text">什么是综合架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B0%E7%9A%84%E8%A6%81%E6%B1%82"><span class="nav-number">3.</span> <span class="nav-text">新的要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%BC%E5%90%88%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3"><span class="nav-number">4.</span> <span class="nav-text">综合架构详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="nav-number">5.</span> <span class="nav-text">技术栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%A4%87%E4%BB%BD%E6%9C%8D%E5%8A%A1"><span class="nav-number">6.</span> <span class="nav-text">1.备份服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#reync%E5%8F%82%E6%95%B0%E9%80%89%E9%A1%B9"><span class="nav-number">6.1.</span> <span class="nav-text">reync参数选项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsync%E4%BC%81%E4%B8%9A%E5%BA%94%E7%94%A8"><span class="nav-number">6.2.</span> <span class="nav-text">rsync企业应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsunc%E4%B8%8D%E5%90%8C%E6%A8%A1%E5%BC%8F"><span class="nav-number">6.3.</span> <span class="nav-text">rsunc不同模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%EF%BC%9A%E5%85%A8%E7%BD%91%E5%A4%87%E4%BB%BD%E9%A1%B9%E7%9B%AE"><span class="nav-number">6.4.</span> <span class="nav-text">项目：全网备份项目</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%EF%BC%89%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">6.4.1.</span> <span class="nav-text">1）环境准备</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%EF%BC%89%E9%A1%B9%E7%9B%AE%E6%AD%A5%E9%AA%A4"><span class="nav-number">6.4.2.</span> <span class="nav-text">2）项目步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%EF%BC%89rsync%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%B0%83%E8%AF%95"><span class="nav-number">6.4.3.</span> <span class="nav-text">3）rsync服务端调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%A4%87%E4%BB%BD%E8%84%9A%E6%9C%AC"><span class="nav-number">6.4.4.</span> <span class="nav-text">4）客户端备份脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%84%9A%E6%9C%AC%E6%B5%8B%E8%AF%95"><span class="nav-number">6.4.5.</span> <span class="nav-text">5）服务端脚本测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%EF%BC%89%E5%A2%9E%E5%8A%A0%E6%A0%A1%E9%AA%8C%E5%8A%9F%E8%83%BD"><span class="nav-number">6.4.6.</span> <span class="nav-text">6）增加校验功能</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%95%B0%E6%8D%AE%E6%9C%8D%E5%8A%A1-%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">7.</span> <span class="nav-text">2.数据服务-存储服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1%EF%BC%89%E7%8E%AF%E5%A2%83%E8%AF%B4%E6%98%8E"><span class="nav-number">7.1.</span> <span class="nav-text">1）环境说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%83%A8%E7%BD%B2"><span class="nav-number">7.2.</span> <span class="nav-text">2）服务端部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3%EF%BC%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%8C%82%E8%BD%BD"><span class="nav-number">7.3.</span> <span class="nav-text">3）客户端挂载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E7%9B%B8%E5%85%B3%E6%96%87%E4%BB%B6"><span class="nav-number">7.4.</span> <span class="nav-text">NFS相关文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E6%9C%8D%E5%8A%A1%E7%AB%AF%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">7.5.</span> <span class="nav-text">NFS服务端配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4%EF%BC%89%E6%9C%8D%E5%8A%A1%E7%AB%AF%E7%94%A8%E6%88%B7%E5%8E%8B%E7%BC%A9"><span class="nav-number">7.6.</span> <span class="nav-text">4）服务端用户压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5%EF%BC%89%E7%94%A8%E6%88%B7%E5%8E%8B%E7%BC%A9%E6%A1%88%E4%BE%8B"><span class="nav-number">7.7.</span> <span class="nav-text">5）用户压缩案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NFS%E4%BC%98%E5%8C%96"><span class="nav-number">7.8.</span> <span class="nav-text">NFS优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%AE%9E%E6%97%B6%E5%90%8C%E6%AD%A5%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">8.</span> <span class="nav-text">3.实时同步存储服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-SSHD%E6%9C%8D%E5%8A%A1"><span class="nav-number">9.</span> <span class="nav-text">4.SSHD服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#openssh-server%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">9.1.</span> <span class="nav-text">openssh-server配置文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%9B%86%E7%BE%A4%E6%89%B9%E9%87%8F%E7%AE%A1%E7%90%86-%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81%E4%B8%8Eansible%E6%A8%A1%E5%9D%97"><span class="nav-number">10.</span> <span class="nav-text">5.集群批量管理-密钥认证与ansible模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%86%E9%92%A5%E8%AE%A4%E8%AF%81"><span class="nav-number">10.1.</span> <span class="nav-text">密钥认证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Absible%E8%87%AA%E5%8A%A8%E7%BB%B4%E6%8A%A4"><span class="nav-number">10.2.</span> <span class="nav-text">Absible自动维护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ansible%E6%A8%A1%E5%9D%97"><span class="nav-number">10.3.</span> <span class="nav-text">Ansible模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Command-%E6%A8%A1%E5%9D%97"><span class="nav-number">10.4.</span> <span class="nav-text">Command 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shell%E6%A8%A1%E5%9D%97"><span class="nav-number">10.5.</span> <span class="nav-text">shell模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#script%E6%A8%A1%E5%9D%97"><span class="nav-number">10.6.</span> <span class="nav-text">script模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file%E6%A8%A1%E5%9D%97"><span class="nav-number">10.7.</span> <span class="nav-text">file模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#copy%E6%A8%A1%E5%9D%97"><span class="nav-number">10.8.</span> <span class="nav-text">copy模块</span></a></li></ol></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-  <p class="site-author-name" itemprop="name">John Doe</p>
-  <div class="site-description" itemprop="description"></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">4</span>
-          <span class="site-state-item-name">posts</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">tags</span>
-      </div>
-  </nav>
-</div>
-
-
-
-      </div>
-
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-
-<div class="copyright">
-  
-  &copy; 
-  <span itemprop="copyrightYear">2024</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
-</div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
-  </div>
-
-        
-
-
-
-
-
-
-
-
-      </div>
-    </footer>
-  </div>
-
-  
-  <script src="/lib/anime.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/muse.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-</body>
-</html>
+</div><div class="article-licensing box"><div class="licensing-title"><p>集群架构学习.md</p><p><a href="http://example.com/2024/02/27/集群架构学习-md/">http://example.com/2024/02/27/集群架构学习-md/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>John Doe</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2024-02-27</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2024-03-14</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><div class="notification is-danger">You need to set <code>install_url</code> to use ShareThis. Please set it in <code>_config.yml</code>.</div></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">Like this article? Support the author with</h3><div class="buttons is-centered"><a class="button donate" href="/" target="_blank" rel="noopener" data-type="afdian"><span class="icon is-small"><i class="fas fa-charging-station"></i></span><span>Afdian.net</span></a><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>Alipay</span><span class="qrcode"><img src="/" alt="Alipay"></span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="buymeacoffee"><span class="icon is-small"><i class="fas fa-coffee"></i></span><span>Buy me a coffee</span></a><a class="button donate" href="/" target="_blank" rel="noopener" data-type="patreon"><span class="icon is-small"><i class="fab fa-patreon"></i></span><span>Patreon</span></a><div class="notification is-danger">You forgot to set the <code>business</code> or <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.</div><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>Wechat</span><span class="qrcode"><img src="/" alt="Wechat"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/02/23/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/"><span class="level-item">Linux基础学习</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">Comments</h3><div class="notification is-danger">You forgot to set the <code>shortname</code> for Disqus. Please set it in <code>_config.yml</code>.</div></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar" src="/img/avatar.png" alt="残无痕"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">残无痕</p><p class="is-size-6 is-block">Canwuhen</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Your location</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">4</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tag</p><a href="/tags"><p class="title">1</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/ppoffice" target="_blank" rel="noopener">Follow</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/ppoffice"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">Links</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">Recents</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-02-27T14:36:03.000Z">2024-02-27</time></p><p class="title"><a href="/2024/02/27/%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84%E5%AD%A6%E4%B9%A0-md/">集群架构学习.md</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-02-23T02:54:59.000Z">2024-02-23</time></p><p class="title"><a href="/2024/02/23/Linux%E5%9F%BA%E7%A1%80%E5%AD%A6%E4%B9%A0/">Linux基础学习</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-07-11T05:29:40.000Z">2022-07-11</time></p><p class="title"><a href="/2022/07/11/JQuery%E7%AC%94%E8%AE%B0/">JQuery笔记</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-02-23T03:49:17.000Z">2022-02-23</time></p><p class="title"><a href="/2022/02/23/hexo%E7%AC%94%E8%AE%B0/">hexo笔记</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">Archives</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/02/"><span class="level-start"><span class="level-item">February 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/07/"><span class="level-start"><span class="level-item">July 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/02/"><span class="level-start"><span class="level-item">February 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><div class="card widget" data-type="tags"><div class="card-content"><div class="menu"><h3 class="menu-label">Tags</h3><div class="field is-grouped is-grouped-multiline"><div class="control"><a class="tags has-addons" href="/tags/js/"><span class="tag">js</span><span class="tag">1</span></a></div></div></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">Subscribe for updates</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div><div class="card widget"><div class="card-content"><div class="notification is-danger">You need to set <code>client_id</code> and <code>slot_id</code> to show this AD unit. Please set it in <code>_config.yml</code>.</div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="Subscribe"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="残无痕" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Doe</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p><p class="is-size-7">© 2019</p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
