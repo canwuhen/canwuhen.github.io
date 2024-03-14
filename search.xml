@@ -763,21 +763,37 @@
 <table>
 <thead>
 <tr>
-<th></th>
-<th></th>
+<th>file 模块</th>
+<th>模块说明</th>
 </tr>
 </thead>
 <tbody><tr>
-<td></td>
-<td></td>
+<td>path</td>
+<td>路径（目录，文件）<strong>必填</strong></td>
+</tr>
+<tr>
+<td>src</td>
+<td>源文件一般用于link 创建软连接</td>
+</tr>
+<tr>
+<td>state</td>
+<td>状态（模式）<br />state&#x3D;directory 创建目录<br />state&#x3D;file（默认）更新文件，如果文件不存在也不创建<br />state&#x3D;link 创建软连接</td>
+</tr>
+<tr>
+<td>state</td>
+<td>state&#x3D;absent 删除（ :warning: 注意如果是目录则会递归删除目录 ）</td>
 </tr>
 <tr>
 <td></td>
 <td></td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>mode</td>
+<td>mode&#x3D;755 创建并修改权限</td>
+</tr>
+<tr>
+<td>onwer</td>
+<td>onwer&#x3D;root</td>
 </tr>
 <tr>
 <td></td>
